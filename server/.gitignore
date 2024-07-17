@@ -1,0 +1,4 @@
+# Environment variable configuration file
+# This file contains sensitive information such as database credentials, API keys, etc.
+# It should not be tracked by version control to keep this information secure
+.env
