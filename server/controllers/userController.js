@@ -39,6 +39,36 @@ const getUserById = async (req, res) => {
     }
 }; 
 
+// Controller function to get a user by email
+const getUserByEmail = async (req, res) => {
+    const { email } = req.params;
+    try {
+        const user = await User.findByEmail(email);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user);
+    } catch (err) {
+        console.error('Error retrieving user', err);
+        res.status(500).send('Error retrieving user');
+    }
+}; 
+
+// Controller function to get a user by username
+const getUserByUsername = async (req, res) => {
+    const { username } = req.params;
+    try {
+        const user = await User.findByUsername(username);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user);
+    } catch (err) {
+        console.error('Error retrieving user', err);
+        res.status(500).send('Error retrieving user');
+    }
+}; 
+
 // Controller function to update a user by user_id
 const updateUser = async (req, res) => {
     const { user_id } = req.params;
@@ -75,6 +105,8 @@ module.exports = {
     createUser, 
     getAllUsers,
     getUserById,
+    getUserByEmail,
+    getUserByUsername,
     updateUser,
     deleteUser,
 };

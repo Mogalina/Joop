@@ -4,6 +4,10 @@ const db = require('../db/db');
 // Import database error handler
 const dbErrorHandler = require('../helpers/dbErrorHandler');
 
+// Import password hashing
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 // Define User model schema
 const User = {
     /**
@@ -16,15 +20,16 @@ const User = {
      * @returns {Promise<object>} A promise that resolves with the created user object.
      */
     async create(username, email, password) {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const queryText = `
             INSERT INTO Users (username, email, password, first_login, last_login)
             VALUES ($1, $2, $3, NOW(), NOW())
             RETURNING *
         `;
-        return dbErrorHandler(async (username, email, password) => {
-            const result = await db.query(queryText, [username, email, password]);
+        return dbErrorHandler(async (username, email, hashedPassword) => {
+            const result = await db.query(queryText, [username, email, hashedPassword]);
             return result.rows[0];
-        })(username, email, password);
+        })(username, email, hashedPassword);
     },
 
     /**
@@ -58,6 +63,42 @@ const User = {
             const result = await db.query(queryText, [userId]);
             return result.rows[0];
         })(userId);
+    },
+
+    /**
+     * Retrieve a user by email from the database.
+     * 
+     * @param {string} email - Email of the user to retrieve.
+     * 
+     * @returns {Promise<object>} A promise that resolves with the user object.
+     */
+    async findByEmail(email) {
+        const queryText = `
+            SELECT * FROM Users 
+            WHERE email = $1
+        `;
+        return dbErrorHandler(async (email) => {
+            const result = await db.query(queryText, [email]);
+            return result.rows[0];
+        })(email);
+    },
+
+    /**
+     * Retrieve a user by username from the database.
+     * 
+     * @param {string} username - Username of the user to retrieve.
+     * 
+     * @returns {Promise<object>} A promise that resolves with the user object.
+     */
+    async findByUsername(username) {
+        const queryText = `
+            SELECT * FROM Users 
+            WHERE username = $1
+        `;
+        return dbErrorHandler(async (username) => {
+            const result = await db.query(queryText, [username]);
+            return result.rows[0];
+        })(username);
     },
 
     /**
