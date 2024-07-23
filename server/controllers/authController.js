@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 /**
- * Register a new user.
+ * Register a new user to database.
  * 
  * @param {Object} req - Express request object, containing the user data.
  * @param {Object} res - Express response object.
@@ -41,7 +41,7 @@ const register = async (req, res) => {
 };
 
 /**
- * Login a user.
+ * Login a user from database.
  *
  * @param {Object} req - Express request object, containing the user credentials.
  * @param {Object} res - Express response object.

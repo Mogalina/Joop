@@ -1,0 +1,127 @@
+/**
+ * Automatization function to configure Flexbox.
+ *
+ * @param {String} $direction - Direction of flex layout.
+ *
+ * Usage:
+ * @include set-flex(row);
+ * @include set-flex(column);
+ */
+@mixin set-flex($direction) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: center;
+    align-items: center;
+    @content;
+};
+
+/**
+ * Automatization function to configure background image.
+ *
+ * @param {String} $path - Background image file path.
+ *
+ * Usage:
+ * @include set-bg-img('./asstes/images/background.png');
+ */
+@mixin set-bg-img($path) {
+    background-image: url($path); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    overflow: hidden;
+    @content;
+};
+
+/**
+ * Automatization function to configure border radius.
+ *
+ * @param {Number | String} $radius - Border radius value.
+ *
+ * Usage:
+ * @include set-border-radius(20px);
+ */
+@mixin set-border-radius($radius) {
+    border-radius: $radius;
+};
+
+/**
+ * Automatization function to configure form input style.
+ *
+ * @param {Number | String} $width - Input box width (default: 300px).
+ * @param {Number | String} $height - Input box height (default: 40px).
+ *
+ * Usage:
+ * @include set-input(200px, 40px);
+ */
+@mixin set-input($width: 300px, $height: 40px) {
+    font-family: inherit;
+    font-style: inherit;
+    font-size: inherit;
+    font-weight: normal;
+    color: inherit;
+    border-radius: 10px;
+    width: $width;
+    height: $height;
+    background: transparent;
+    border: 2px solid rgba(223, 223, 223, 0.5);
+    transition: all .3s ease;
+    padding: 0px 15px;
+    letter-spacing: inherit;
+};
+
+/**
+ * Automatization function to configure button style.
+ *
+ * @param {String} $bg-color - Background color.
+ * @param {String} $text-color - Text color.
+ *
+ * Usage:
+ * @include set-button(blue, white);
+ */
+@mixin set-button($bg-color, $text-color) {
+    cursor: pointer;
+    border-radius: 50px;
+    border-color: transparent;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: $bg-color;
+    color: $text-color;
+    height: 45px;
+    width: 120px;
+    margin-top: 30px;
+    border: 2px solid rgba(223, 223, 223, 0.5);
+    
+    &:hover {
+        background-color: lighten($bg-color, 5%);
+    };
+};
+
+/**
+ * Automatization function to configure hovered object color.
+ *
+ * @param {String} $color - Color to apply on hover.
+ *
+ * Usage:
+ * @include set-hover-color(purple);
+ */
+@mixin set-hover-color($color) {
+    &:hover {
+        color: $color;
+        cursor: pointer;
+    };
+};
+
+/**
+ * Automatization function to configure media screen.
+ *
+ * @param {Number | String} $min-width - Minimum screen width.
+ * @param {Number | String} $max-width - Maximum screen width.
+ *
+ * Usage:
+ * @include set-media-screen(320px, 450px);
+ */
+@mixin set-media-screen($min-width, $max-width) {
+    @media screen and (min-width: $min-width) and (max-width: $max-width) {
+        @content;
+    };
+};

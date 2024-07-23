@@ -1,0 +1,18 @@
+// Import predefined colors palette
+@use './styles/abstract/colors' as *;
+
+// Import predefined fonts
+@use './styles/abstract/fonts' as *;
+
+// Define default body style
+body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    background-color: $clear-white;
+    color: $fade-black;
+    letter-spacing: 0.015em;
+    font-size: 14px;
+    font-family: 'Noto Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+};
