@@ -20,7 +20,7 @@ console.log(`Connecting to PostgreSQL with
     database: ${process.env.DB_NAME}
 `);
 
-//Set up error handler for PostgreSQL connection pool
+// Set up error handler for PostgreSQL connection pool
 pool.on('error', (err, client) => {
     console.error('Unexpected error on idle client', err);
     process.exit(-1);

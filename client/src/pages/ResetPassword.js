@@ -2,24 +2,23 @@
 import React from 'react';
 
 // Components
-import SignupForm from '../components/SignupForm';
-import LoginForm from '../components/LoginForm';
+import ResetPasswordForm from '../components/ResetPasswordForm';
 
 // Layout components
 import MainLayout from '../layouts/MainLayout';
 
 // Styles
-import '../styles/pages/auth.scss';
+import '../styles/pages/reset-password.scss';
 
-const Auth = () => {
+const ResetPassword = () => {
     return (
         <MainLayout>
             <main className='auth-container'>
-                <SignupForm /> 
+                <ResetPasswordForm />
             </main>
         </MainLayout>
     );
 };
 
-// Export authentification function
-export default Auth;
+// Export reset password page function
+export default ResetPassword;

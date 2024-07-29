@@ -7,11 +7,17 @@ const bodyParser = require('body-parser');
 // Import REST API routes
 const userRoutes = require('./routes/userRoutes');
 
+// Import CORS 
+const cors = require('cors');
+
 // Load environment variables from .env file
 require('dotenv').config();
 
 // Create an instance of Express application
 const app = express();
+
+// Use CORS security feature
+app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(express.json());

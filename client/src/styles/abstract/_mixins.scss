@@ -1,3 +1,9 @@
+// Import predefined screen sizes
+@use '../abstract/variables' as *;
+
+// Import predefined colors palette
+@use '../abstract/colors' as *;
+
 /**
  * Automatization function to configure Flexbox.
  *
@@ -63,10 +69,13 @@
     width: $width;
     height: $height;
     background: transparent;
-    border: 2px solid rgba(223, 223, 223, 0.5);
+    border: 2px solid rgba($light-grey, 0.5);
     transition: all .3s ease;
     padding: 0px 15px;
     letter-spacing: inherit;
+    @include set-media-screen($min-screen, $mobile-screen) {
+        width: 260px !important;
+    };
 };
 
 /**
@@ -88,11 +97,12 @@
     color: $text-color;
     height: 45px;
     width: 120px;
-    margin-top: 30px;
-    border: 2px solid rgba(223, 223, 223, 0.5);
+    border: 2px solid rgba($light-grey, 0.5);
+    transition: background-color, box-shadow 0.5s ease;
     
     &:hover {
         background-color: lighten($bg-color, 5%);
+        box-shadow: $bg-color 0px 7px 29px 0px;
     };
 };
 
@@ -124,4 +134,33 @@
     @media screen and (min-width: $min-width) and (max-width: $max-width) {
         @content;
     };
+};
+
+/**
+ * Automatization function to configure box shadow.
+ *
+ * Usage:
+ * @include set-box-shadow;
+ */
+@mixin set-box-shadow {
+    box-shadow: 0 4px 8px 0 rgba($pure-black, 0.2), 0 6px 20px 0 rgba($pure-black, 0.19);
+};
+
+/**
+ * Automatization function to configure response message.
+ *
+ * @param {String} $bg-color - Background color.
+ * @param {String} $text-color - Text color.
+ *
+ * Usage:
+ * @include set-message(white, red);
+ */
+@mixin set-message($bg-color: transparent, $text-color: $pastel-pink) {
+    color: $text-color;
+    background-color: $bg-color;
+    font-style: inherit !important;
+    font-family: inherit !important;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    @content;
 };

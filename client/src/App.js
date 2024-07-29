@@ -3,7 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Pages
 import HomePage from './pages/Home';
-import AuthPage from './pages/Auth';
+import LoginPage from './pages/Login';
+import SignupPage from './pages/Signup';
+import ForgotPasswordPage from './pages/ForgotPassword';
+import ResetPasswordPage from './pages/ResetPassword';
 
 // Styles
 import './index.scss';
@@ -18,8 +21,20 @@ function App() {
                         element={<HomePage />} 
                     />
                     <Route
-                        path='/authentificate'
-                        element={<AuthPage />} 
+                        path='/login'
+                        element={<LoginPage />} 
+                    />
+                    <Route
+                        path='/signup'
+                        element={<SignupPage />} 
+                    />
+                    <Route
+                        path='/forgot-password'
+                        element={<ForgotPasswordPage />} 
+                    />
+                    <Route
+                        path='/reset-password'
+                        element={<ResetPasswordPage />} 
                     />
                 </Routes>
             </BrowserRouter>
