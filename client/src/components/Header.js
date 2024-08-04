@@ -10,23 +10,31 @@ import Logo from '../assets/images/pngs/logo.png';
 import Profile from '../assets/images/pngs/profile.png';
 import Goal from '../assets/images/pngs/goal.png';
 
+/**
+ * Header component.
+ * 
+ * @returns {JSX.Element} Rendered header component with navigation links.
+ */
 const Header = () => {
     return (
         <header>
             <nav className='header-container'>
+                {/* Container for navigation options */}
                 <div className='options-container'>
+                    {/* Link to home page with logo */}
                     <Link to='/'>
+                        {/* Website logo */}
                         <img src={Logo} className='icon' alt='Joop website logo' />
                     </Link>
                 </div>
                 <div className='options-container'>
-                    <img src={Goal} className='icon' alt='Goals' />
-                    <img src={Profile} className='icon' alt='Profile' />
+                    <img src={Goal} className='icon' alt='Goals' /> {/* Goals icon */}
+                    <img src={Profile} className='icon' alt='Profile' /> {/* Profile icon */}
                 </div>
             </nav>
         </header>
     );
 };
 
-// Export header function
+// Export Header component across application
 export default Header;

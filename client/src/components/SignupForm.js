@@ -61,12 +61,12 @@ const SignupForm = () => {
     const onSubmit = async (formData) => {
         try {
             // Send registration data to server with POST request
-            const response = await axios.post('http://localhost:3001/api/register', formData);
+            const response = await axios.post('http://localhost:3001/api/auth/register', formData);
 
             // Check if registration was successful
             if (response.status === 201) {
                 // Redirect user to login page
-                navigate('/login');
+                navigate('/email-confirmation');
             }
         } catch (error) {
             // Check for validation errors

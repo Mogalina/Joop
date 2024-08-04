@@ -1,0 +1,17 @@
+// Import generic and predefined mixins
+@use '../abstract/mixins' as *;
+
+// Import predefined colors palette
+@use '../abstract/colors' as *;
+
+// Import predefined screen sizes
+@use '../abstract/variables' as *;
+
+.auth-container {
+    height: 100vh;
+    width: 100vw;
+    @include set-flex(column) {
+        justify-content: unset;
+    };
+    @include set-bg-img('../../assets/images/svgs/people.svg');
+};

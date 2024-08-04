@@ -125,6 +125,46 @@ const User = {
     },
 
     /**
+     * Update user email confirmation status.
+     * 
+     * @param {string} email - Email of user to update.
+     * 
+     * @returns {Promise<Object>} A promise that resolves with the updated user object.
+     */
+    async confirmEmail(email) {
+        const queryText = `
+            UPDATE Users SET 
+            is_confirmed = TRUE 
+            WHERE email = $1 
+            RETURNING *
+        `;
+        return dbErrorHandler(async (email) => {
+            const result = await db.query(queryText, [email]);
+            return result.rows[0];
+        })(email);
+    },
+
+    /**
+     * Update user last login time.
+     * 
+     * @param {string} email - Email of user to update.
+     * 
+     * @returns {Promise<Object>} A promise that resolves with the updated user object.
+     */
+    async updateLastLogin(email) {
+        const queryText = `
+            UPDATE Users SET
+            last_login = NOW() 
+            WHERE email = $1
+            RETURNING *
+        `;
+        return dbErrorHandler(async (email) => {
+            const result = await db.query(queryText, [email]);
+            return result.rows[0];
+        })(email);
+    },
+
+    /**
      * Delete a user from the database.
      * 
      * @param {number} userId - ID of the user to delete. 

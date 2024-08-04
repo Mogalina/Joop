@@ -2,29 +2,29 @@
 import React from 'react';
 
 // Components
-import SignupForm from '../components/SignupForm';
+import EmailConfirmationForm from '../components/EmailConfirmationForm';
 
 // Layout components
 import MainLayout from '../layouts/MainLayout';
 
 // Styles
-import '../styles/pages/signup.scss';
+import '../styles/pages/email-confirmation.scss';
 
 /**
  * Signup component.
  * 
  * @returns {JSX.Element} Rendered signup page component.
  */
-const Signup = () => {
+const EmailConfirmation = () => {
     return (
         <MainLayout>
             <main className='auth-container'>
-                {/* Render SignupForm component for user register */}
-                <SignupForm />
+                {/* Render EmailConfirmationForm component for user register */}
+                <EmailConfirmationForm />
             </main>
         </MainLayout>
     );
 };
 
 // Export Signup component across application
-export default Signup;
+export default EmailConfirmation;

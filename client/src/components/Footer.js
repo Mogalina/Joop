@@ -9,5 +9,5 @@ const Footer = () => {
     );
 };
 
-// Export footer function
+// Export Footer component across application
 export default Footer;

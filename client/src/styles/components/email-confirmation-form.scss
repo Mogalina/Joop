@@ -1,0 +1,97 @@
+// Import generic and predefined mixins
+@use '../abstract/mixins' as *;
+
+// Import predefined colors palette
+@use '../abstract/colors' as *;
+
+// Import predefined screen sizes
+@use '../abstract/variables' as *;
+
+.email-confirmation-form-container {
+    margin-top: 140px;
+    @include set-flex(column) {
+        justify-content: space-around;
+    };
+    color: inherit;
+    font-style: inherit !important;
+    font-family: inherit !important;
+    background-color: rgba($clear-white, 0.85);
+    @include set-box-shadow;
+    width: 400px;
+    border: 4px solid $fade-white;
+    @include set-border-radius(20px);
+    @include set-media-screen($min-screen, $mobile-screen) {
+        width: calc(100% - 4em);
+    };
+    @include set-media-screen(($mobile-screen + 1), $max-screen) {
+        margin-top: 170px;
+    };
+    transition: background-color 0.5s ease;
+
+    &:hover {
+        background-color: rgba($clear-white, 0.96);
+    };
+
+    .title {
+        @include set-flex(column);
+        margin: 0 0 0 0;
+        padding-top: 20px;
+        padding-bottom: 25px;
+        font-weight: bold;
+        font-size: 2.5em;
+        width:85%;
+        border-bottom: 2px solid $clear-grey;
+    };
+};
+
+.form-container {
+    @include set-flex(column);
+    background-color: transparent !important;
+    width: 100%;
+    height: 100%;
+    @include set-border-radius(25px);
+};
+
+.send-code-container {
+    font-size: inherit;
+    font-weight: normal;
+    text-align: center;
+    color: $fade-grey;
+    width: 85%;
+    border-top: 2px solid $clear-grey;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .send-code {
+        font-size: inherit;
+        font-weight: bold;
+        color: $pastel-pink;
+        text-decoration: none;
+        cursor: pointer;
+    };
+};
+
+form {
+    margin-bottom: 38px;
+    @include set-flex(column) {
+        row-gap: 8px;
+    }; 
+
+    input {
+        @include set-input;
+
+        &:focus {  
+            border-color: $pastel-pink;
+            outline: 1px solid $pastel-pink;
+        };
+    };
+
+    .btn-submit {
+        @include set-button($pastel-pink, $clear-white);
+        margin-top: 26px;
+    };
+
+    .error-message {
+        @include set-message;
+    };
+};

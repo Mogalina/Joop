@@ -55,11 +55,12 @@
  *
  * @param {Number | String} $width - Input box width (default: 300px).
  * @param {Number | String} $height - Input box height (default: 40px).
+ * @param {Number | String} $small-width - Small screen input box width (default: 260px).
  *
  * Usage:
- * @include set-input(200px, 40px);
+ * @include set-input(200px, 40px, 170px);
  */
-@mixin set-input($width: 300px, $height: 40px) {
+@mixin set-input($width: 300px, $height: 40px, $small-width: 260px) {
     font-family: inherit;
     font-style: inherit;
     font-size: inherit;
@@ -74,7 +75,7 @@
     padding: 0px 15px;
     letter-spacing: inherit;
     @include set-media-screen($min-screen, $mobile-screen) {
-        width: 260px !important;
+        width: $small-width !important;
     };
 };
 
@@ -98,7 +99,7 @@
     height: 45px;
     width: 120px;
     border: 2px solid rgba($light-grey, 0.5);
-    transition: background-color, box-shadow 0.5s ease;
+    transition: background-color, box-shadow 0.3s ease;
     
     &:hover {
         background-color: lighten($bg-color, 5%);

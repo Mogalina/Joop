@@ -52,7 +52,7 @@ const LoginForm = () => {
     const onSubmit = async (formData) => {
         try {
             // Send submission data to server with POST request
-            const response = await axios.post('http://localhost:3001/api/login', formData);
+            const response = await axios.post('http://localhost:3001/api/auth/login', formData);
 
             // Check if login was successful
             if (response.status === 200) {

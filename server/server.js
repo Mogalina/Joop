@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 // Import REST API routes
 const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // Import CORS 
 const cors = require('cors');
@@ -24,7 +25,8 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Mount routes under '/api'
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 // Define port number on which server will listen
 const port = process.env.PORT || 3000;
