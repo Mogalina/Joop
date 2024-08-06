@@ -320,7 +320,7 @@ const resetPassword = async (req, res) => {
     }
 };
 
-// Export authentification functions
+// Export authentification controller functions
 module.exports = {
     register,
     login,

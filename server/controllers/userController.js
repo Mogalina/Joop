@@ -183,7 +183,7 @@ const deleteUser = async (req, res) => {
     }
 };
 
-// Export user functions
+// Export user controller functions
 module.exports = {
     createUser, 
     getAllUsers,
