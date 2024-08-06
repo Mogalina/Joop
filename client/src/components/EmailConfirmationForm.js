@@ -5,12 +5,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 // Interfaces
 import GenericForm from '../interfaces/GenericForm';
 
 // Styles
 import '../styles/components/email-confirmation-form.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * Email code confirmation form component.
@@ -46,37 +48,31 @@ const EmailConfirmationForm = () => {
     ];
 
     /**
-     * Handles form submission.
+     * Handles form submission for email confirmation.
      * 
      * @param {Object} formData - Data submitted from form.
      */
     const onSubmit = async (formData) => {
-        try {
-            // Send form data to server
-            const response = await axios.post('http://localhost:3001/api/auth/email-confirmation', formData);
-
-            // Check if confirmation code send was successful
-            if (response.status === 201) {
-                // Redirect user to login page
-                navigate('/login');
+        // Handle promise and show notifications
+        toast.promise(
+            axios.post('http://localhost:3001/api/auth/email-confirmation', formData), // Configure promise for email confirmation
+            {
+                pending: 'Confirming email...', // Message while pending
+                success: {
+                    render() {
+                        // Return success message
+                        return 'Successfully confirmed email. Redirecting to login...'; 
+                    },
+                    onClose: () => navigate('/login'), // Redirect user on successful confirmation
+                },
+                error: {
+                    render({ data }) {
+                        // Display error message
+                        return data.response ? data.response.data.message : 'Email confirmation failed';
+                    },
+                },
             }
-        } catch (error) {
-            // Check for validation errors
-            if (error.response && error.response.data && error.response.data.message) {
-                // Destructure and extract error message from server response
-                const { message } = error.response.data;
-                if (message.includes('Invalid or expired confirmation code')) {
-                    // Set confirmation code error
-                    setError('confirmationCode', { message });
-                } else {
-                    // Display other possible errors
-                    console.error('Error:', error);
-                }
-            } else {
-                // Display unexpected errors
-                console.error('Error:', error);
-            }
-        }
+        );
     };
 
     /**
@@ -85,30 +81,41 @@ const EmailConfirmationForm = () => {
      * @param {Object} formData - Data submitted from form.
      */
     const resendConfirmationCode = async (formData) => {
-        try {
-            // Send email address to server
-            const response = await axios.post('http://localhost:3001/api/auth/resend-confirmation-code', formData);
-
-            // Check if confirmation code reset was successful
-            if (response.status === 201) {
-                alert('New confirmation code has been sent to your email.');
+        // Handle promise and show notifications
+        toast.promise(
+            axios.post('http://localhost:3001/api/auth/resend-confirmation-code', formData), // Configure promise
+            {
+                pending: 'Resending confirmation code...', // Message while pending
+                success: {
+                    render() {
+                        // Return success message
+                        return 'New confirmation code send to your email.'; 
+                    },
+                },
+                error: {
+                    render({ data }) {
+                        // Display error message
+                        return data.response ? data.response.data.message : 'Failed to resend confirmation code';
+                    },
+                },
             }
-        } catch (error) {
-            // Handle any errors
-            if (error.response && error.response.data && error.response.data.message) {
-                // Display possible errors
-                console.error('Error:', error.response.data.message);
-                alert(error.response.data.message); // Alert user about the error
-            } else {
-                // Display unexpected errors
-                console.error('Error:', error);
-            }
-        }
+        );
     };
 
     // Render email confirmation form component
     return (
         <div className='email-confirmation-form-container'>
+            {/* Configure react-toastify container */}
+            <ToastContainer 
+                position="top-center" 
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+                theme="light"
+                transition={Bounce}
+            />
             <p className='title'>Verify email</p> {/* Email confirmation form title */}
             <div className='form-container'>
                 {/* Render generic form component with necessary props */}

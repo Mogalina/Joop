@@ -1,8 +1,12 @@
 // Imports and configuration 
 import React from 'react';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 // Layout components
 import MainLayout from '../layouts/MainLayout';
+
+// Styles
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * Home component.

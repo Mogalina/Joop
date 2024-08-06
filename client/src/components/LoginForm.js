@@ -5,12 +5,14 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 // Interfaces
 import GenericForm from '../interfaces/GenericForm';
 
 // Styles
 import '../styles/components/login-form.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * Login form component.
@@ -50,38 +52,45 @@ const LoginForm = () => {
      * @param {Object} formData - Data submitted from form.
      */
     const onSubmit = async (formData) => {
-        try {
-            // Send submission data to server
-            const response = await axios.post('http://localhost:3001/api/auth/login', formData);
-
-            // Check if login was successful
-            if (response.status === 200) {
-                // Store token in local storage
-                localStorage.setItem('authToken', response.data.token);
-
-                // Redirect user to home page
-                navigate('/');
+        // Handle promise and show notifications
+        toast.promise(
+            axios.post('http://localhost:3001/api/auth/login', formData), // Configure promise
+            {
+                pending: 'Logging in...', // Message while pending
+                success: {
+                    render({ data }) {
+                        // Store token in local storage
+                        localStorage.setItem('authToken', data.token);
+                        
+                        // Return success message
+                        return 'Successfully logged in'; 
+                    },
+                    onClose: () => navigate('/'), // Redirect user on successful login
+                },
+                error: {
+                    render({ data }) {
+                        // Display error message
+                        return data.response ? data.response.data.message : 'Login failed';
+                    },
+                },
             }
-        } catch (error) {
-            // Check for validation errors
-            if (error.response && error.response.data) {
-                // Destructure and extract error message from server response
-                const { message } = error.response.data;
-                if (message.includes('Invalid email or password')) {
-                    setError('email', { message }); // Set email error if submission fails
-                    setError('password', { message }); // Set password error if submission fails
-                } else {
-                    // Display unexpected errors
-                    console.error('Error:', error);  
-                    setError('email', { message }); // Set email error if submission fails
-                }
-            }
-        }
+        );
     };
 
     // Render login form component
     return (
         <div className='login-form-container'>
+            {/* Configure react-toastify container */}
+            <ToastContainer 
+                position="top-center" 
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+                theme="light"
+                transition={Bounce}
+            />
             <p className='title'>Access account</p> {/* Login form title */}
             <div className='form-container'>
                 {/* Render generic form component with necessary props */}

@@ -5,12 +5,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 // Interfaces
 import GenericForm from '../interfaces/GenericForm';
 
 // Styles
 import '../styles/components/signup-form.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * Signup form component.
@@ -54,45 +56,47 @@ const SignupForm = () => {
     ];
 
     /**
-     * Handles form submission.
+     * Handles form submission for signup.
      * 
      * @param {Object} formData - Data submitted from form.
      */
     const onSubmit = async (formData) => {
-        try {
-            // Send registration data to server
-            const response = await axios.post('http://localhost:3001/api/auth/register', formData);
-
-            // Check if registration was successful
-            if (response.status === 201) {
-                // Redirect user to login page
-                navigate('/email-confirmation');
+        // Handle promise and show notifications
+        toast.promise(
+            axios.post('http://localhost:3001/api/auth/register', formData), // Configure promise for signup
+            {
+                pending: 'Signing up...', // Message while pending
+                success: {
+                    render({ data }) {
+                        // Return success message
+                        return 'Successfully registered'; 
+                    },
+                    onClose: () => navigate('/email-confirmation'), // Redirect user to email confirmation on successful signup
+                },
+                error: {
+                    render({ data }) {
+                        // Display error message
+                        return data.response ? data.response.data.message : 'Signup failed';
+                    },
+                },
             }
-        } catch (error) {
-            // Check for validation errors
-            if (error.response && error.response.data && error.response.data.message) {
-                // Destructure and extract error message from server response
-                const { message } = error.response.data;
-                if (message.includes('Email address already exists')) {
-                    // Set email error if already exists
-                    setError('email', { message });
-                } else if (message.includes('Username already exists')) {
-                    // Set username error if already exists
-                    setError('username', { message });
-                } else {
-                    // Display other possible errors
-                    console.error('Error:', error);
-                }
-            } else {
-                // Display unexpected errors
-                console.error('Error:', error);
-            }
-        }
+        );
     };
 
     // Render signup form component
     return (
         <div className='signup-form-container'>
+            {/* Configure react-toastify container */}
+            <ToastContainer 
+                position="top-center" 
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+                theme="light"
+                transition={Bounce}
+            />
             <p className='title'>Create account</p> {/* Signup form title */}
             <div className='form-container'>
                 {/* Render generic form component with necessary props */}

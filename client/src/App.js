@@ -1,5 +1,6 @@
 // Imports and configuration
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify'; 
 
 // Pages
 import HomePage from './pages/Home';
@@ -11,6 +12,7 @@ import EmailConfirmationPage from './pages/EmailConfirmation';
 
 // Styles
 import './index.scss';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 /**
  * Main application component.
