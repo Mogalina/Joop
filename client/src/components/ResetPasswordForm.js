@@ -5,12 +5,14 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 // Interfaces
 import GenericForm from '../interfaces/GenericForm';
 
 // Styles
 import '../styles/components/reset-password-form.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * Reset password form component.
@@ -57,37 +59,45 @@ const ResetPasswordForm = () => {
      * @param {Object} formData - Data submitted from form.
      */
     const onSubmit = async (formData) => {
-        try {
-            // Send reset password data to server
-            const response = await axios.post('http://localhost:3001/api/auth/reset-password', {
+        // Handle promise and show notifications
+        toast.promise(
+            axios.post('http://localhost:3001/api/auth/reset-password', { // Configure promise
                 token,
                 newPassword: formData.password,
-            });
-
-            // Check if password reset was successful
-            if (response.status === 200) {
-                // Notify user on updates and actions
-                alert('Password has been reset successfully.');
-                // Redirect user to login page
-                navigate('/login');
+            }),
+            {
+                pending: 'Resetting password...', // Message while pending
+                success: {
+                    render() {
+                        // Return success message
+                        return 'Password has been reset'; 
+                    },
+                    onClose: () => navigate('/login'), // Redirect user on successful reset
+                },
+                error: {
+                    render({ data }) {
+                        // Display error message
+                        return data.response ? data.response.data.message : 'Failed to reset password';
+                    },
+                },
             }
-        } catch (error) {
-            // Handle errors from the server
-            if (error.response && error.response.data && error.response.data.message) {
-                // Display error message from server response
-                if (error.response.data.message === 'Invalid or expired token') {
-                    alert('Password reset link expired. Send a request again.');
-                }
-            } else {
-                console.error('Error:', error);
-                alert('An unexpected error occurred. Please try again later.');
-            }
-        }
+        );
     };
 
     // Render reset password form component
     return (
         <div className='reset-password-form-container'>
+            {/* Configure react-toastify container */}
+            <ToastContainer 
+                position="top-center" 
+                autoClose={5000}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+                theme="light"
+                transition={Bounce}
+            />
             <p className='title'>Reset password</p> {/* Reset password form title */}
             <div className='form-container'>
                 {/* Render generic form component with necessary props */}
