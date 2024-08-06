@@ -15,5 +15,11 @@ router.post('/email-confirmation', authController.confirmEmail);
 // Route to resend confirmation code on email
 router.post('/resend-confirmation-code', authController.resendConfirmationCode);
 
+// Route to reset account password
+router.post('/reset-password', authController.resetPassword);
+
+// Route to request reset account password on email
+router.post('/request-reset-password', authController.requestPasswordReset);
+
 // Export API operations
 module.exports = router;

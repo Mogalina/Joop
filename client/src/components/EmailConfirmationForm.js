@@ -52,11 +52,11 @@ const EmailConfirmationForm = () => {
      */
     const onSubmit = async (formData) => {
         try {
-            // Send data to server with POST request
+            // Send form data to server
             const response = await axios.post('http://localhost:3001/api/auth/email-confirmation', formData);
 
             // Check if confirmation code send was successful
-            if (response.status === 200) {
+            if (response.status === 201) {
                 // Redirect user to login page
                 navigate('/login');
             }
@@ -90,7 +90,7 @@ const EmailConfirmationForm = () => {
             const response = await axios.post('http://localhost:3001/api/auth/resend-confirmation-code', formData);
 
             // Check if confirmation code reset was successful
-            if (response.status === 200) {
+            if (response.status === 201) {
                 alert('New confirmation code has been sent to your email.');
             }
         } catch (error) {

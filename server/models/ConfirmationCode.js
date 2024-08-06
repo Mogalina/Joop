@@ -4,7 +4,7 @@ const db = require('../db/db');
 // Import database error handler
 const dbErrorHandler = require('../helpers/dbErrorHandler');
 
-// Define ConfirmationCode model schema.
+// Define ConfirmationCode model
 const ConfirmationCode = {
     /**
      * Create a new confirmation code in the database.

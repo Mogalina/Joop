@@ -60,7 +60,7 @@ const SignupForm = () => {
      */
     const onSubmit = async (formData) => {
         try {
-            // Send registration data to server with POST request
+            // Send registration data to server
             const response = await axios.post('http://localhost:3001/api/auth/register', formData);
 
             // Check if registration was successful

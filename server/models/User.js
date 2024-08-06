@@ -182,6 +182,27 @@ const User = {
             return result.rows[0];
         })(userId);
     },
+
+    /**
+     * Update user password in the database.
+     * 
+     * @param {number} userId - ID of user.
+     * @param {string} newPassword - New password to be set.
+     * 
+     * @returns {Promise<object>} A promise that resolves with the updated user object.
+     */
+    async updatePassword(userId, newPassword) {
+        const queryText = `
+            UPDATE users
+            SET password = $1
+            WHERE user_id = $2
+            RETURNING *
+        `;
+        return dbErrorHandler(async (newPassword, userId) => {
+            const result = await db.query(queryText, [newPassword, userId]);
+            return result.rows[0];
+        })(newPassword, userId);
+    },
 };
 
 // Export User model

@@ -21,6 +21,7 @@
     border: 4px solid $fade-white;
     @include set-border-radius(20px);
     @include set-media-screen($min-screen, $mobile-screen) {
+        background-color: rgba($clear-white, 0.96);
         width: calc(100% - 4em);
     };
     @include set-media-screen(($mobile-screen + 1), $max-screen) {

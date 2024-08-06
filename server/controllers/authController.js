@@ -4,6 +4,9 @@ const User = require('../models/User');
 // Import ConfirmationCode model
 const ConfirmationCode = require('../models/ConfirmationCode');
 
+// Import PasswordResetToken model
+const PasswordResetToken = require('../models/PasswordResetToken');
+
 // Import database connection
 const db = require('../db/db');
 
@@ -15,6 +18,9 @@ const jwt = require('jsonwebtoken');
 
 // Import email confirmation helper
 const { sendConfirmationEmail, generateConfirmationCode } = require('../helpers/emailConfirmHandler');
+
+// Import password reset request email helper
+const { sendPasswordResetRequest } = require('../helpers/emailRequestPasswordReset');
 
 // Load environment variables from .env file
 require('dotenv').config();
@@ -132,7 +138,8 @@ const resendConfirmationCode = async (req, res) => {
             return res.status(400).send({ message: 'No confirmation code found' });
         }
 
-        const currentTime = new Date(); // Get the current time
+        // Get the current time
+        const currentTime = new Date();
 
         // Check if existing confirmation code expired
         if (currentTime <= codeEntry.expires_at) {
@@ -177,7 +184,7 @@ const login = async (req, res) => {
 
         // Check if user confirmed email address
         if (!user.is_confirmed) {
-            return res.status(403).send({ message: 'Email not confirmed.' });
+            return res.status(403).send({ message: 'Email not confirmed' });
         }
 
         // Check if password is matching
@@ -202,30 +209,114 @@ const login = async (req, res) => {
 };
 
 /**
- * Controller function to handle forgot password request.
+ * Request password reset for user account.
  *
- * @param {Object} req - Express request object, containing user email address.
+ * @param {Object} req - Express request object, containing user email.
  * @param {Object} res - Express response object.
  * 
  * @returns {Promise<void>}
  */
-const forgotPassword = async (req, res) => {
-    // Retrieve user email address
+const requestPasswordReset = async (req, res) => {
+    // Extract email address from request body
     const { email } = req.body;
 
-    // Check if any email address is provided
+    // Check if email is provided
     if (!email) {
         return res.status(400).send({ message: 'Email is required' });
     }
 
     try {
-        // Attempt to send confirmation code to email
-        await sendConfirmationEmail(email);
+        // Retrieve user by email address
+        const user = await User.findByEmail(email);
+        if (!user) { 
+            return res.status(400).send({ message: 'User not found' });
+        }
 
-        res.status(200).send({ message: 'Confirmation code successfully sent' });
+        // Check for existing password reset token
+        const token = await PasswordResetToken.findByUserId(user.user_id);
+
+        // Get the current time
+        const currentTime = new Date();
+    
+        // Check if token exists and is still valid
+        if (token && currentTime <= token.expires_at) {
+            return res.status(400).send({ message: 'Password reset link already sent' });
+        }
+
+        // Generate a password reset token
+        const resetToken = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        // Set expiration time for token
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+        // Save token in the database
+        await PasswordResetToken.create(user.user_id, resetToken, expiresAt);
+
+        // Set account password reset request link
+        const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+
+        // Send reset token to email
+        await sendPasswordResetRequest(email, resetLink);
+
+        res.status(200).send({ message: 'Password reset link sent to your email' });
     } catch (error) {
-        // Display unexpected errors
-        res.status(500).send({ message: 'Error sending confirmation code', error });
+        console.error('Error requesting password reset', error);
+        res.status(500).send({ message: 'Error requesting password reset', error });
+    }
+};
+
+/**
+ * Reset user password using provided token.
+ *
+ * @param {Object} req - Express request object, containing the reset token and new password.
+ * @param {Object} res - Express response object.
+ * 
+ * @returns {Promise<void>}
+ */
+const resetPassword = async (req, res) => {
+    // Extract token and new password from body
+    const { token, newPassword } = req.body;
+
+    // Validate token and new password
+    if (!token || !newPassword) {
+        return res.status(400).send({ message: 'Token and new password are required' });
+    }
+
+    try {
+        // Verify the reset token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+
+        // Find user by ID (ensure that token is valid)
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(400).send({ message: 'Invalid token or user does not exist' });
+        }
+
+        // Find password reset token in database
+        const resetToken = await PasswordResetToken.findByToken(token);
+        if (!resetToken) {
+            return res.status(400).send({ message: 'Invalid or expired token'});
+        }
+
+        // Check if token is expired
+        if (new Date() > resetToken.expires_at) {
+            return res.status(400).send({ message: 'Token has expired' });
+        };
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the user's password in the database
+        await User.updatePassword(userId, hashedPassword);
+
+        // Delete token from the database
+        await PasswordResetToken.deleteByUserId(userId);
+
+        res.status(200).send({ message: 'Password has been reset successfully' });
+    } catch (error) {
+        console.error('Error resetting password', error);
+        res.status(500).send({ message: 'Error resetting password', error });
     }
 };
 
@@ -233,7 +324,8 @@ const forgotPassword = async (req, res) => {
 module.exports = {
     register,
     login,
-    forgotPassword,
+    requestPasswordReset,
+    resetPassword,
     confirmEmail,
     resendConfirmationCode,
 };

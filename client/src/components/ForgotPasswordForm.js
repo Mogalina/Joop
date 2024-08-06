@@ -1,6 +1,6 @@
 // Imports and configuration 
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -13,7 +13,7 @@ import GenericForm from '../interfaces/GenericForm';
 import '../styles/components/forgot-password-form.scss';
 
 /**
- * Forgot password form component.
+ * Request account password reset form component.
  *
  * @returns {JSX.Element} Rendered forgot password form component.
  */
@@ -36,7 +36,7 @@ const ForgotPasswordForm = () => {
         resolver: yupResolver(validationSchema)
     });
 
-    // Define input fields for signup form
+    // Define input fields for request account password reset form
     const fields = [
         { name: 'email', placeholder: 'Email', type: 'email', required: true },
     ];
@@ -48,13 +48,29 @@ const ForgotPasswordForm = () => {
      */
     const onSubmit = async (formData) => {
         try {
-            
+            // Send request to server to initiate account password reset
+            const response = await axios.post('http://localhost:3001/api/auth/request-reset-password', formData);
+
+            // Check if request was successful
+            if (response.status === 200) {
+                // Notify user on updates and actions
+                alert('Password reset link has been sent to your email.');
+            }
         } catch (error) {
-            
+            // Handle errors from the server
+            if (error.response && error.response.data && error.response.data.message) {
+                const { message } = error.response.data;
+                // Set error for email address field
+                setError('email', { message });
+            } else {
+                // Display unexpected errors
+                console.error('Error:', error);
+                alert('An unexpected error occurred. Please try again later.');
+            }
         }
     };
 
-     // Render forgot password form component
+    // Render account password reset form component
     return (
         <div className='forgot-password-form-container'>
             <p className='title'>Forgot password</p> {/* Forgot password form title */}
@@ -65,7 +81,7 @@ const ForgotPasswordForm = () => {
                     onSubmit={handleSubmit(onSubmit)} // Handle form submission
                     control={control} // Control for form state management
                     errors={errors} // Error state for input fields
-                    buttonText="Send email" // Text for submit button
+                    buttonText="Continue" // Text for submit button
                 />
             </div>
         </div>

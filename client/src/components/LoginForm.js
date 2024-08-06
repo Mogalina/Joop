@@ -51,7 +51,7 @@ const LoginForm = () => {
      */
     const onSubmit = async (formData) => {
         try {
-            // Send submission data to server with POST request
+            // Send submission data to server
             const response = await axios.post('http://localhost:3001/api/auth/login', formData);
 
             // Check if login was successful
@@ -73,6 +73,7 @@ const LoginForm = () => {
                 } else {
                     // Display unexpected errors
                     console.error('Error:', error);  
+                    setError('email', { message }); // Set email error if submission fails
                 }
             }
         }
@@ -97,7 +98,7 @@ const LoginForm = () => {
                             <input type='checkbox' className='remember-btn' name='remember-me' value='remember-btn' />
                             <label htmlFor='remember-btn'>Remember me</label>
                         </div>
-                        {/* Link to forgot password page */}
+                        {/* Link to reset password page */}
                         <Link to='/forgot-password' target='_blank'>Forgot Password</Link>
                     </div>
                 </GenericForm>
