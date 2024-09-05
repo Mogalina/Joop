@@ -12,8 +12,6 @@ require('dotenv').config();
  * @param {Function} next - Express next middleware function.
  */
 const authentification = (req, res, next) => {
-    console.log('Cookies:', req.cookies);
-
     // Retrieve token from cookies
     const token = req.cookies.authToken;
     if (!token) {
