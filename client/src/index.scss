@@ -4,10 +4,13 @@
 // Import predefined fonts
 @use './styles/abstract/fonts' as *;
 
+// Import generic and predefined mixins
+@use './styles/abstract/mixins' as *;
+
 // Define default body style
 body {
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
+    margin: 0 !important;
+    padding: 0 !important;
     background-color: $clear-white;
     color: $fade-black;
     letter-spacing: 0.015em;
@@ -15,4 +18,6 @@ body {
     font-family: 'Noto Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    height: 100% !important;
 };

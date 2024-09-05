@@ -4,6 +4,9 @@ const express = require('express');
 // Import middleware to parse incoming request bodies
 const bodyParser = require('body-parser');
 
+// Import Cookie parser middleware
+const cookieParser = require('cookie-parser');
+
 // Import REST API routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -17,8 +20,14 @@ require('dotenv').config();
 // Create an instance of Express application
 const app = express();
 
+// Use Cookie parser middleware
+app.use(cookieParser());
+
 // Use CORS security feature
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Application URL (do not use in production)
+    credentials: true, // Allow credentials to be sent (cookies, headers)
+}));
 
 // Middleware to parse JSON bodies
 app.use(express.json());

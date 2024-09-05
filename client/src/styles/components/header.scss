@@ -23,7 +23,7 @@ header {
     };
     width: 100%;
     height: 50px;
-    margin-top: 20px;
+    margin-top: 30px;
     font-style: inherit !important;
     font-family: inherit !important;
     background-color: transparent;
@@ -69,7 +69,7 @@ header {
     };
     @include set-media-screen((($mobile-screen + 1)), $max-screen) {
         background-color: $clear-white;
-        background-color: rgba($clear-white, 0.85);
+        background-color: rgba($clear-white, 0.94);
         padding: 0.7em;
         border-radius: 50px;
         border: 4px solid $fade-white;

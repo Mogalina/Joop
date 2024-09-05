@@ -9,6 +9,7 @@ import SignupPage from './pages/Signup';
 import ForgotPasswordPage from './pages/ForgotPassword';
 import ResetPasswordPage from './pages/ResetPassword';
 import EmailConfirmationPage from './pages/EmailConfirmation';
+import ProfilePage from './pages/Profile';
 
 // Styles
 import './index.scss';
@@ -36,6 +37,10 @@ function App() {
                     <Route
                         path='/signup' // Signup route
                         element={<SignupPage />} // Render SignupPage component
+                    />
+                    <Route
+                        path='/profile' // Profile route
+                        element={<ProfilePage />} // Render ProilePage component
                     />
                     <Route
                         path='/forgot-password' // Forgot password route

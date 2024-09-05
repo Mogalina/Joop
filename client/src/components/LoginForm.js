@@ -1,5 +1,5 @@
 // Imports and configuration
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,6 +35,9 @@ const LoginForm = () => {
             .required('Password is required') // Mark password as required field
     });
 
+    // Set 'Remember Me' button state
+    const [rememberMe, setRememberMe] = useState(false);
+
     // Destructure useForm hook methods
     const { handleSubmit, setError, control, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema)
@@ -52,20 +55,27 @@ const LoginForm = () => {
      * @param {Object} formData - Data submitted from form.
      */
     const onSubmit = async (formData) => {
+        // Set form data to send including 'rememberMe' option status
+        const dataToSend = { ...formData, rememberMe };
+
         // Handle promise and show notifications
         toast.promise(
-            axios.post('http://localhost:3001/api/auth/login', formData), // Configure promise
+            axios.post('http://localhost:3001/api/auth/login', dataToSend), // Configure promise
             {
                 pending: 'Logging in...', // Message while pending
                 success: {
                     render({ data }) {
-                        // Store token in local storage
-                        localStorage.setItem('authToken', data.token);
+                        // Store token based on 'Remember Me' function
+                        if (rememberMe) {
+                            localStorage.setItem('authToken', data.token);
+                        } else {
+                            sessionStorage.setItem('authToken', data.token);
+                        }
                         
                         // Return success message
                         return 'Successfully logged in'; 
                     },
-                    onClose: () => navigate('/'), // Redirect user on successful login
+                    onClose: () => navigate('/profile'), // Redirect user on successful login
                 },
                 error: {
                     render({ data }) {
@@ -104,7 +114,14 @@ const LoginForm = () => {
                     <div className='form-help-container'>
                         <div className='remember-me-container'>
                             {/* Remember me functionality */}
-                            <input type='checkbox' className='remember-btn' name='remember-me' value='remember-btn' />
+                            <input 
+                                type='checkbox' 
+                                className='remember-btn' 
+                                name='remember-me'
+                                value='remember-btn'
+                                checked={rememberMe} 
+                                onChange={() => setRememberMe(!rememberMe)}  
+                            />
                             <label htmlFor='remember-btn'>Remember me</label>
                         </div>
                         {/* Link to reset password page */}

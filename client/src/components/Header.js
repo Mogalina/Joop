@@ -24,13 +24,14 @@ const Header = () => {
                     <div className='options-container'>
                         {/* Link to home page with logo */}
                         <Link to='/'>
-                            {/* Website logo */}
-                            <img src={Logo} className='icon' alt='Joop website logo' />
+                            <img src={Logo} className='icon' alt='Joop website logo' /> {/* Website logo */}
                         </Link>
                     </div>
                     <div className='options-container'>
                         <img src={Goal} className='icon' alt='Goals' /> {/* Goals icon */}
-                        <img src={Profile} className='icon' alt='Profile' /> {/* Profile icon */}
+                        <Link to='/profile'>
+                            <img src={Profile} className='icon' alt='Profile' /> {/* Profile icon */}
+                        </Link>
                     </div>
                 </div>
             </nav>

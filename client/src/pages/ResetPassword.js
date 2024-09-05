@@ -10,6 +10,11 @@ import MainLayout from '../layouts/MainLayout';
 // Styles
 import '../styles/pages/reset-password.scss';
 
+/**
+ * ResetPassword component.
+ * 
+ * @returns {JSX.Element} Rendered reset password page component.
+ */
 const ResetPassword = () => {
     return (
         <MainLayout>

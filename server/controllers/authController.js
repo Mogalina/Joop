@@ -73,6 +73,31 @@ const register = async (req, res) => {
 };
 
 /**
+ * Logout a user by clearing the auth token.
+ *
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * 
+ * @returns {Promise<void>}
+ */
+const logout = async (req, res) => {
+    try {
+        // Clear the authentication token cookie
+        res.clearCookie('authToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict'
+        });
+
+        // Send success response
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+        console.error('Error logging out', error);
+        res.status(500).send('Error logging out');
+    }
+};
+
+/**
  * Handle email confirmation with confirmation code.
  *
  * @param {Object} req - Express request object.
@@ -174,7 +199,7 @@ const resendConfirmationCode = async (req, res) => {
  * @returns {Promise<void>}
  */
 const login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
     try {
         // Retrieve user by email address
         const user = await User.findByEmail(email);
@@ -197,11 +222,28 @@ const login = async (req, res) => {
         console.log('\n@LOGIN (user credentials)');
         console.log('\tUSERNAME: ' + user.username);
         console.log('\tEMAIL: ' + user.email);
-        console.log('\tPASSWORD (hashed): ' + user.password);
+        console.log('\tPASSWORD (hashed): ' + user.password + "\n");
+
+        // Set login token expiration time based on 'Remember Me' option
+        const tokenExpiration = rememberMe ? '7d' : '1h';
 
         // Generate JSON Web Token
-        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: tokenExpiration });
+
+        // Set cookie options
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax',
+            path: '/',
+            maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000,
+        };
+
+        // Send token as a cookie
+        res.cookie('authToken', token, cookieOptions);
+
+        // Display successful login operation message
+        res.json({ message: 'Login successful' });
     } catch (err) {
         console.error('Error logging in', err);
         res.status(500).send('Error logging in');
@@ -328,4 +370,5 @@ module.exports = {
     resetPassword,
     confirmEmail,
     resendConfirmationCode,
+    logout,
 };

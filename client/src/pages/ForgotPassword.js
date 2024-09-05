@@ -10,6 +10,11 @@ import MainLayout from '../layouts/MainLayout';
 // Styles
 import '../styles/pages/forgot-password.scss';
 
+/**
+ * ForgotPassword component.
+ * 
+ * @returns {JSX.Element} Rendered forgot password page component.
+ */
 const ForgotPassword = () => {
     return (
         <MainLayout>

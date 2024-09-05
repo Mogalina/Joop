@@ -12,17 +12,19 @@ require('dotenv').config();
  * @param {Function} next - Express next middleware function.
  */
 const authentification = (req, res, next) => {
-    // Retrieve token from Authorization header
-    const token = req.header('Authorization')?.split(' ')[1];
+    console.log('Cookies:', req.cookies);
+
+    // Retrieve token from cookies
+    const token = req.cookies.authToken;
     if (!token) {
-        return res.status(401).json({ message: 'Access denided due to missing token' });
+        return res.status(401).json({ message: 'Access denied due to missing token' });
     }
 
     try {
         // Verify token using secret key
         const verified = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Attach the decoded token to requested object
+        // Attach decoded token to request object
         req.user = verified;
 
         // Pass request to next middleware
@@ -32,5 +34,5 @@ const authentification = (req, res, next) => {
     }
 };
 
-// Export authentification functions
+// Export authentication functions
 module.exports = authentification;
