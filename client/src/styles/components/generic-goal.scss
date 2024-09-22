@@ -1,0 +1,45 @@
+// Import generic and predefined mixins
+@use '../abstract/mixins' as *;
+
+// Import predefined colors palette
+@use '../abstract/colors' as *;
+
+// Import predefined screen sizes
+@use '../abstract/variables' as *;
+
+.goal {
+    @include set-flex(row) {
+        justify-content: space-between !important;
+    };
+    margin-left: auto;
+    margin-right: auto;
+    height: 45px;
+    width: 92.5%;
+    border: 4px solid $fade-white;
+    border-radius: 14px;
+    transition: background-color, box-shadow 0.5s ease;
+
+    &:hover {
+        cursor: pointer;
+        @include set-box-shadow;
+    };
+
+    .goal-name {
+        width: 70%;
+        text-align: left;
+        margin-left: 24px;
+    };
+
+    .goal-time {
+        font-weight: 600;
+        margin-right: 34px;
+        width: 22%;
+        text-align: right;
+    };
+
+    .goal-star-icon {
+        height: 24px;
+        width: 24px;
+        margin-left: 30px;
+    };
+};

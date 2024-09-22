@@ -10,7 +10,7 @@ import Invisible from '../assets/images/pngs/invisible.png'
 import '../styles/components/generic-form.scss';
 
 /**
- * GenericForm component.
+ * Generic Form component.
  * 
  * @param {Array} fields - Array of field objects.
  * @param {Function} onSubmit - Function to handle form submission.

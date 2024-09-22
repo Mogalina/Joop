@@ -7,7 +7,7 @@ import '../styles/components/header.scss';
 
 // Images
 import Logo from '../assets/images/pngs/logo.png';
-import Profile from '../assets/images/pngs/profile.png';
+import Profile from '../assets/images/pngs/profile-option.png';
 import Goal from '../assets/images/pngs/goal.png';
 
 /**
